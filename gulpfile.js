@@ -1,21 +1,21 @@
 const gulp = require('gulp');
 const { src, dest } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
-const rm = require( 'gulp-rm' )
-
-function buildStyles() {
-    return gulp.src('src/sass/*.scss')
-       .pipe(sass.sync({outputStyle: 'compressed'}).on('error', sass.logError)) 
-       .pipe(gulp.dest('dist/'));
-};
+const rm = require('gulp-rm');
 
 function copy() {
-    return src('src/styles/sass/*.scss').pipe(dest('dist/'));
+    return src('src/styles/*.css').pipe(dest('dist/css/'));
 };
 
-gulp.task('clean', () => {
-    return gulp.src('dist/**/*', { read: false }).pipe(rm())
+function clean() {
+    return gulp.src('dist/**/*', { read: false }).pipe(rm());
+}
+
+gulp.task("sass", function() {
+    gulp.src('./src/sass/style.scss')
+    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(gulp.dest('./dist/css'));
 });
 
-exports.buildStyles = buildStyles;
 exports.copy = copy;
+exports.clean = clean;
