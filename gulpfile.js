@@ -1,6 +1,5 @@
 const gulp = require('gulp');
-const { src, dest } = require('gulp');
-const { series } = require('gulp');
+const { src, dest, series } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const rm = require('gulp-rm');
 const gulpIf = require('gulp-if');
