@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const { src, dest, series } = require('gulp');
+const { src, dest, series, watch } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const rm = require('gulp-rm');
 const gulpIf = require('gulp-if');
@@ -28,4 +28,6 @@ async function compileScss() {
 
 exports.clearDist = clearDist;
 exports.compileScss = compileScss;
-exports.build = series(clearDist, compileScss);
+exports.default = series(clearDist, compileScss);
+
+watch('./src/**/*.scss', compileScss);
