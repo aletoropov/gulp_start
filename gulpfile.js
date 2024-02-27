@@ -25,7 +25,6 @@ async function compileScss() {
     .pipe(dest('./dist/css'));
 }
 
-
 exports.clearDist = clearDist;
 exports.compileScss = compileScss;
 exports.default = series(clearDist, compileScss);
