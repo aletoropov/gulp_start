@@ -7,29 +7,26 @@ const gulpIf = require('gulp-if');
 const minifyCss = require('gulp-minify-css');
 const concat = require('gulp-concat');
 
+const styles = [
+    'node_modules/normalize.css/normalize.css',
+    './src/sass/style.scss'
+]
+
 function clearDist() {
     return src('./dist/**/*', { read: false }).pipe(rm());
 }
 
 async function compileScss() {
-    src('./src/sass/style.scss')
+    src(styles)
     .pipe(sass.sync().on('error', sass.logError))
-    .pipe(dest('./dist/css'));
-}
-
-function copyCss() {
-    return src('src/styles/*.css').pipe(dest('dist/css/'));
-}
-
-function minCss() {
-    return src('./dist/css/*.css')
+    .pipe(concat('style.css'))
+    .pipe(dest('./dist/css'))
     .pipe(gulpIf('*.css', minifyCss()))
     .pipe(concat('style.min.css'))
     .pipe(dest('./dist/css'));
 }
 
+
 exports.clearDist = clearDist;
-exports.copyCss = copyCss;
 exports.compileScss = compileScss;
-exports.minCss = minCss;
-exports.build = series(clearDist, copyCss, compileScss);
+exports.build = series(clearDist, compileScss);

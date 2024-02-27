@@ -17,5 +17,8 @@
     "gulp-rm": "^2.0.0",
     "gulp-sass": "^5.1.0",
     "sass": "^1.70.0"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
   }
 }
