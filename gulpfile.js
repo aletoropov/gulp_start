@@ -8,15 +8,24 @@ const concat = require('gulp-concat');
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
 
+/**
+ * Подключаемые стили
+ */
 const styles = [
     'node_modules/normalize.css/normalize.css',
     './src/sass/style.scss'
 ]
 
+/**
+ * Очистка каталога "dist/*"
+ */
 function clearDist() {
     return src('./dist/**/*', { read: false }).pipe(rm());
 }
 
+/**
+ * Компиляция CSS файлов
+ */
 async function compileScss() {
     src(styles)
     .pipe(sass.sync().on('error', sass.logError))
@@ -27,6 +36,9 @@ async function compileScss() {
     .pipe(dest('./dist/css'));
 }
 
+/**
+ * Старт live-сервера для разработки
+ */
 function servStart() {
     browserSync.init({
         server: {
@@ -35,6 +47,9 @@ function servStart() {
     });
 }
 
+/**
+ * Перенос скомпилирпованного HTML кода
+ */
 function copyHtml() {
     return src('src/*.html')
     .pipe(dest('./dist'))
