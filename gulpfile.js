@@ -1,11 +1,12 @@
 const gulp = require('gulp');
 const { src, dest, series, watch } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
-const rm = require('gulp-rm');
+const rm = require('gulp-rm');                         // Очистка директорий 
 const gulpIf = require('gulp-if');
-const minifyCss = require('gulp-minify-css');
-const concat = require('gulp-concat');
-const browserSync = require('browser-sync').create();
+const minifyCss = require('gulp-minify-css');          // Минификация CSS
+const concat = require('gulp-concat');                 // Объединение стилей
+const browserSync = require('browser-sync').create();  // Live-сервер для разработки
+const sassGlob = require('gulp-sass-glob');            // Импорт стилей
 const reload = browserSync.reload;
 
 /**
@@ -28,6 +29,7 @@ function clearDist() {
  */
 async function compileScss() {
     src(styles)
+    .pipe(sassGlob())
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(concat('style.css'))
     .pipe(dest('./dist/css'))
