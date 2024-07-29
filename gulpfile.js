@@ -8,6 +8,7 @@ const concat = require('gulp-concat');                 // Объединение
 const browserSync = require('browser-sync').create();  // Live-сервер для разработки
 const sassGlob = require('gulp-sass-glob');            // Импорт стилей
 const reload = browserSync.reload;
+const autoprefixer = require("gulp-autoprefixer");
 
 /**
  * Подключаемые стили
@@ -31,6 +32,9 @@ async function compileScss() {
     src(styles)
     .pipe(sassGlob())
     .pipe(sass.sync().on('error', sass.logError))
+    .pipe(autoprefixer({
+        cascade: false
+    }))
     .pipe(concat('style.css'))
     .pipe(dest('./dist/css'))
     .pipe(gulpIf('*.css', minifyCss()))

@@ -2,10 +2,13 @@
     max-width: 1140px;
     margin: 0 auto;
     background-color: $main-color;
+    padding: 20px;
 }
 
 .main_header {
     background-color: $main-color;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
 }
 
 .main-header__block {
