@@ -9,6 +9,7 @@ const browserSync = require('browser-sync').create();  // Live-сервер дл
 const sassGlob = require('gulp-sass-glob');            // Импорт стилей
 const reload = browserSync.reload;
 const autoprefixer = require("gulp-autoprefixer");
+const gcmq = require('gulp-group-css-media-queries');        // Группировка медия запросов
 
 /**
  * Подключаемые стили
@@ -32,6 +33,7 @@ async function compileScss() {
     src(styles)
     .pipe(sassGlob())
     .pipe(sass.sync().on('error', sass.logError))
+    .pipe(gcmq())
     .pipe(autoprefixer({
         cascade: false
     }))
