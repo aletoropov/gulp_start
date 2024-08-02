@@ -9,11 +9,17 @@
     background-color: $main-color;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
+    @media (max-width: 768px) {
+        transform: translate(-50%, -50%);
+    }
 }
 
 .main-header__block {
     display: flex;
     justify-content: space-between;
+    @media (max-width: 768px) {
+        background-color: $main-color;
+    }
 }
 
 p {
