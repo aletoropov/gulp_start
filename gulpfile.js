@@ -10,6 +10,7 @@ const reload = browserSync.reload;
 const autoprefixer = require("gulp-autoprefixer");
 const gcmq = require('gulp-group-css-media-queries');  // Группировка медия запросов
 const cleanCSS = require('gulp-clean-css');            // Минификация CSS
+const sourcemaps = require('gulp-sourcemaps');
 
 /**
  * Подключаемые стили
@@ -31,6 +32,7 @@ function clearDist() {
  */
 async function compileScss() {
     src(styles)
+    .pipe(sourcemaps.init())
     .pipe(sassGlob())
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(gcmq())
@@ -41,6 +43,7 @@ async function compileScss() {
     .pipe(dest('./dist/css'))
     .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(concat('style.min.css'))
+    //.pipe(sourcemaps.write('')) // Раскомментировать, когда понядобятся sourcemap при разработке
     .pipe(dest('./dist/css'));
 }
 
