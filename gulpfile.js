@@ -3,13 +3,13 @@ const { src, dest, series, watch } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const rm = require('gulp-rm');                         // Очистка директорий 
 const gulpIf = require('gulp-if');
-const minifyCss = require('gulp-minify-css');          // Минификация CSS
 const concat = require('gulp-concat');                 // Объединение стилей
 const browserSync = require('browser-sync').create();  // Live-сервер для разработки
 const sassGlob = require('gulp-sass-glob');            // Импорт стилей
 const reload = browserSync.reload;
 const autoprefixer = require("gulp-autoprefixer");
-const gcmq = require('gulp-group-css-media-queries');        // Группировка медия запросов
+const gcmq = require('gulp-group-css-media-queries');  // Группировка медия запросов
+const cleanCSS = require('gulp-clean-css');            // Минификация CSS
 
 /**
  * Подключаемые стили
@@ -39,7 +39,7 @@ async function compileScss() {
     }))
     .pipe(concat('style.css'))
     .pipe(dest('./dist/css'))
-    .pipe(gulpIf('*.css', minifyCss()))
+    .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(concat('style.min.css'))
     .pipe(dest('./dist/css'));
 }
