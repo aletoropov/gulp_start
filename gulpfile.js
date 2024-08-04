@@ -48,6 +48,18 @@ async function compileScss() {
 }
 
 /**
+ * Сборка JavaScript файлов
+ */
+function compScripts() {
+    return src('src/js/*js')
+    .pipe(sourcemaps.init())                  // Инициализация sourcemap
+    .pipe(concat('main.js', {newLine: ";"}))  // Склеиваем JavaScript
+    .pipe(sourcemaps.write(''))               // Сохранение sourcemap
+    .pipe(dest('./dist/js'))
+
+}
+
+/**
  * Старт live-сервера для разработки
  */
 function servStart() {
@@ -71,7 +83,9 @@ exports.clearDist = clearDist;
 exports.compileScss = compileScss;
 exports.servStart = servStart;
 exports.copyHtml = copyHtml;
-exports.default = series(clearDist, compileScss, copyHtml, servStart);
+exports.compScripts = compScripts;
+exports.default = series(clearDist, compileScss, copyHtml, compScripts, servStart);
 
+watch('./src/*.js', compScripts);
 watch('./src/**/*.scss', compileScss);
 watch('./src/*.html', copyHtml);
