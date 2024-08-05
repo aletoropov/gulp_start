@@ -11,6 +11,7 @@ const autoprefixer = require("gulp-autoprefixer");
 const gcmq = require('gulp-group-css-media-queries');  // Группировка медия запросов
 const cleanCSS = require('gulp-clean-css');            // Минификация CSS
 const sourcemaps = require('gulp-sourcemaps');
+const babel = require('gulp-babel');                   // Подключение Babel
 
 /**
  * Подключаемые стили
@@ -54,6 +55,9 @@ function compScripts() {
     return src('src/js/*js')
     .pipe(sourcemaps.init())                  // Инициализация sourcemap
     .pipe(concat('main.js', {newLine: ";"}))  // Склеиваем JavaScript
+    .pipe(babel({
+        presets: ['@babel/env']
+    }))
     .pipe(sourcemaps.write(''))               // Сохранение sourcemap
     .pipe(dest('./dist/js'))
 
