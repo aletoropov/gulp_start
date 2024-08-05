@@ -10,9 +10,12 @@
   "author": "Alexandr Toropov",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
     "browser-sync": "^3.0.2",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
+    "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-group-css-media-queries": "^1.2.2",
