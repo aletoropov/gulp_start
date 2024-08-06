@@ -12,6 +12,7 @@ const gcmq = require('gulp-group-css-media-queries');  // Группировка
 const cleanCSS = require('gulp-clean-css');            // Минификация CSS
 const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');                   // Подключение Babel
+const uglify = require('gulp-uglify');                 // Минификация JavaScript 
 
 /**
  * Подключаемые стили
@@ -19,6 +20,13 @@ const babel = require('gulp-babel');                   // Подключение
 const styles = [
     'node_modules/normalize.css/normalize.css',
     './src/sass/style.scss'
+]
+
+/**
+ * Подключение скриптов
+ */
+const scripts = [
+    './src/js/*.js' // Можно поключить другие JavaScript библиотеки из npm
 ]
 
 /**
@@ -44,23 +52,25 @@ async function compileScss() {
     .pipe(dest('./dist/css'))
     .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(concat('style.min.css'))
-    //.pipe(sourcemaps.write('')) // Раскомментировать, когда понядобятся sourcemap при разработке
-    .pipe(dest('./dist/css'));
+    //.pipe(sourcemaps.write(''))            // Раскомментировать, когда понядобятся sourcemap при разработке
+    .pipe(dest('./dist/css'))
+    .pipe(reload({ stream: true }));         // Перезагрузка live-сервера
 }
 
 /**
  * Сборка JavaScript файлов
  */
 function compScripts() {
-    return src('src/js/*js')
+    return src(scripts)
     .pipe(sourcemaps.init())                  // Инициализация sourcemap
     .pipe(concat('main.js', {newLine: ";"}))  // Склеиваем JavaScript
     .pipe(babel({
         presets: ['@babel/env']
     }))
+    .pipe(uglify())                           // Минификация JavaScript 
     .pipe(sourcemaps.write(''))               // Сохранение sourcemap
-    .pipe(dest('./dist/js'))
-
+    .pipe(dest('./dist/js'))                  // Сохранение JavaScript
+    .pipe(reload({ stream: true }));          // Перезагрузка live-сервера
 }
 
 /**
@@ -90,6 +100,6 @@ exports.copyHtml = copyHtml;
 exports.compScripts = compScripts;
 exports.default = series(clearDist, compileScss, copyHtml, compScripts, servStart);
 
-watch('./src/*.js', compScripts);
-watch('./src/**/*.scss', compileScss);
 watch('./src/*.html', copyHtml);
+watch('./src/**/*.scss', compileScss);
+watch('./src/js/*.js', compScripts);
