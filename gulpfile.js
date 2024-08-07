@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const { src, dest, series, watch } = require('gulp');
+const { src, dest, series, watch, parallel } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const rm = require('gulp-rm');                         // Очистка директорий 
 const gulpIf = require('gulp-if');
@@ -98,7 +98,7 @@ exports.compileScss = compileScss;
 exports.servStart = servStart;
 exports.copyHtml = copyHtml;
 exports.compScripts = compScripts;
-exports.default = series(clearDist, compileScss, copyHtml, compScripts, servStart);
+exports.default = series(clearDist, parallel(compileScss, copyHtml, compScripts), servStart);
 
 watch('./src/*.html', copyHtml);
 watch('./src/**/*.scss', compileScss);
