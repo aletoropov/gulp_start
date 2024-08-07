@@ -14,20 +14,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');                   // Подключение Babel
 const uglify = require('gulp-uglify');                 // Минификация JavaScript 
 
-/**
- * Подключаемые стили
- */
-const styles = [
-    'node_modules/normalize.css/normalize.css',
-    './src/sass/style.scss'
-]
-
-/**
- * Подключение скриптов
- */
-const scripts = [
-    './src/js/*.js' // Можно поключить другие JavaScript библиотеки из npm
-]
+const {DIST_PATH, SRC_PATH, STYLES_LIBS, JS_LIBS} = require('./gulp.config');
 
 /**
  * Очистка каталога "dist/*"
@@ -40,7 +27,7 @@ function clearDist() {
  * Компиляция CSS файлов
  */
 async function compileScss() {
-    src(styles)
+    src([...STYLES_LIBS, './src/sass/style.scss'])
     .pipe(sourcemaps.init())
     .pipe(sassGlob())
     .pipe(sass.sync().on('error', sass.logError))
@@ -61,7 +48,7 @@ async function compileScss() {
  * Сборка JavaScript файлов
  */
 function compScripts() {
-    return src(scripts)
+    return src([...JS_LIBS, './src/js/*.js'])
     .pipe(sourcemaps.init())                  // Инициализация sourcemap
     .pipe(concat('main.js', {newLine: ";"}))  // Склеиваем JavaScript
     .pipe(babel({
@@ -88,7 +75,7 @@ function servStart() {
  * Перенос скомпилирпованного HTML кода
  */
 function copyHtml() {
-    return src('src/*.html')
+    return src('./src/*.html')
     .pipe(dest('./dist'))
     .pipe(reload({ stream: true }));
 }
