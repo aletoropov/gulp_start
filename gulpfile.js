@@ -13,6 +13,7 @@ const cleanCSS = require('gulp-clean-css');            // Минификация
 const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');                   // Подключение Babel
 const uglify = require('gulp-uglify');                 // Минификация JavaScript 
+const imagemin = require('gulp-imagemin');             // Оптимизация изображений 
 
 const {DIST_PATH, SRC_PATH, STYLES_LIBS, JS_LIBS} = require('./gulp.config');
 
@@ -80,13 +81,25 @@ function copyHtml() {
     .pipe(reload({ stream: true }));
 }
 
+/**
+ * Сжатие изображений 
+ */
+function imageMin() {
+    return src('./src/images/*')
+      .pipe(imagemin())
+      .pipe(dest('./dist/images/'))
+      .pipe(reload({ stream: true}));
+}
+
 exports.clearDist = clearDist;
 exports.compileScss = compileScss;
 exports.servStart = servStart;
 exports.copyHtml = copyHtml;
 exports.compScripts = compScripts;
-exports.default = series(clearDist, parallel(compileScss, copyHtml, compScripts), servStart);
+exports.imageMin = imageMin;
+exports.default = series(clearDist, parallel(compileScss, copyHtml, compScripts, imageMin), servStart);
 
 watch('./src/*.html', copyHtml);
 watch('./src/**/*.scss', compileScss);
 watch('./src/js/*.js', compScripts);
+watch('./src/images/*', imageMin);
