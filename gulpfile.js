@@ -15,12 +15,15 @@ const babel = require('gulp-babel');                   // Подключение
 const uglify = require('gulp-uglify');                 // Минификация JavaScript 
 const imagemin = require('gulp-imagemin');             // Оптимизация изображений 
 
+let env = process.env.NODE_ENV;
+
 const {DIST_PATH, SRC_PATH, STYLES_LIBS, JS_LIBS} = require('./gulp.config');
 
 /**
  * Очистка каталога "dist/*"
  */
 function clearDist() {
+    console.log(env);
     return src('./dist/**/*', { read: false }).pipe(rm());
 }
 
@@ -29,18 +32,20 @@ function clearDist() {
  */
 async function compileScss() {
     src([...STYLES_LIBS, './src/sass/style.scss'])
-    .pipe(sourcemaps.init())
+    .pipe(gulpIf(env === 'dev', sourcemaps.init()))
     .pipe(sassGlob())
     .pipe(sass.sync().on('error', sass.logError))
-    .pipe(gcmq())
-    .pipe(autoprefixer({
-        cascade: false
-    }))
+    .pipe(gulpIf(env === 'dev',
+        autoprefixer({
+            cascade: false
+        })
+    ))
+    .pipe(gulpIf(env === 'prod', gcmq()))
     .pipe(concat('style.css'))
     .pipe(dest('./dist/css'))
-    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(gulpIf(env === 'prod', cleanCSS({compatibility: 'ie8'})))
     .pipe(concat('style.min.css'))
-    //.pipe(sourcemaps.write(''))            // Раскомментировать, когда понядобятся sourcemap при разработке
+    .pipe(gulpIf(env === 'prod', sourcemaps.write('')))            // Раскомментировать, когда понядобятся sourcemap при разработке
     .pipe(dest('./dist/css'))
     .pipe(reload({ stream: true }));         // Перезагрузка live-сервера
 }
