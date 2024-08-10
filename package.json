@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gulp": "gulp"
+    "gulp": "cross-env NODE_ENV=dev gulp",
+    "build": "cross-env NODE_ENV=prod gulp"
   },
   "author": "Alexandr Toropov",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "browser-sync": "^3.0.2",
+    "cross-env": "^7.0.3",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
